@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#141718" />
+    <title>Wheel Run · Tiny paws. Endless trouble.</title>
+    <meta
+      name="description"
+      content="An endless survival run powered by the live Squeekchain wheel. Jump rocks, slide under roots, and see how far your tiny paws can go."
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="Wheel Run · Tiny paws. Endless trouble."
+    />
+    <meta
+      property="og:description"
+      content="The wheel sets the pace. You make the escape. Play an original endless burrow runner powered by Squeekchain."
+    />
+    <meta property="og:image" content="./share.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Wheel Run: a little hamster adventuring through an amber-lit underground burrow."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link
+      rel="preload"
+      href="./fonts/bricolage-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="./assets/style.css" />
+    <script type="module" src="./assets/app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#game">Skip to game</a>
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="brand" href="./" aria-label="Wheel Run home">
+          <img src="./favicon.svg" width="40" height="40" alt="" />
+          <span
+            >Wheel Run<span class="brand-subtitle"
+              >Squeekchain Genesis Code</span
+            ></span
+          >
+        </a>
+        <nav class="utilities" aria-label="Game settings">
+          <button
+            id="help-button"
+            class="utility-button"
+            type="button"
+            aria-label="How to play"
+            aria-haspopup="dialog"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" />
+              <path
+                d="M9.5 9a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4M12 16.5v.1"
+              /></svg
+            ><span>How to play</span>
+          </button>
+          <button
+            id="sound-button"
+            class="utility-button icon-button"
+            type="button"
+            aria-label="Enable sound"
+            aria-pressed="false"
+            title="Enable sound"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m11 5-5 4H3v6h3l5 4z" />
+              <path id="sound-waves" d="m16 9 6 6m0-6-6 6" />
+            </svg>
+          </button>
+        </nav>
+      </header>
+
+      <main>
+        <section
+          id="game"
+          class="game"
+          aria-label="Wheel Run game"
+          data-phase="ready"
+        >
+          <div class="game-stage">
+            <canvas
+              id="burrow"
+              tabindex="0"
+              aria-label="Burrow race. Space or up arrow to jump, down arrow to slide, Escape to pause. On touch screens, tap to jump."
+              aria-describedby="game-instructions"
+              ><span
+                >This game needs a browser with Canvas support. Use the jump and
+                slide buttons to control the runner.</span
+              ></canvas
+            >
+            <div class="hud" aria-label="Run statistics">
+              <div class="hud-stats">
+                <div class="stat">
+                  <span>Score</span><strong id="score">00000</strong>
+                </div>
+                <div class="stat">
+                  <span
+                    ><svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        d="M8 4h8v6a4 4 0 0 1-8 0zm0 2H4v2a4 4 0 0 0 4 4m8-6h4v2a4 4 0 0 1-4 4m-4 2v5m-4 1h8"
+                      /></svg
+                    >Best</span
+                  ><strong id="best">00000</strong>
+                </div>
+                <div class="stat multiplier">
+                  <span>Mult</span><strong id="multiplier">×1.0</strong>
+                </div>
+              </div>
+              <button
+                id="pause-button"
+                class="pause-button"
+                type="button"
+                aria-label="Pause run"
+                hidden
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M8 5v14M16 5v14" />
+                </svg>
+              </button>
+              <span class="scene-label" id="scene-label"
+                >The deep burrow<span>Endless mode</span></span
+              >
+            </div>
+
+            <div class="intro" id="intro">
+              <div class="intro-copy">
+                <h1>Tiny paws.<br /><span>Endless trouble.</span></h1>
+                <p>A survival run powered by Squeekchain.</p>
+                <button type="button" class="primary-button" id="start-button">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m8 5 11 7-11 7z" /></svg
+                  >Start running
+                </button>
+              </div>
+            </div>
+
+            <div class="run-overlay" id="run-overlay" hidden>
+              <div class="overlay-content">
+                <span
+                  class="overlay-symbol"
+                  id="overlay-symbol"
+                  aria-hidden="true"
+                  >Ⅱ</span
+                >
+                <h2 id="overlay-title">Catch your breath.</h2>
+                <p id="overlay-description">The burrow can wait.</p>
+                <div class="result-stats" id="result-stats" hidden>
+                  <span>Score<strong id="final-score">0</strong></span
+                  ><span>Time<strong id="final-time">0s</strong></span
+                  ><span>Best<strong id="final-best">0</strong></span>
+                </div>
+                <button
+                  id="continue-button"
+                  class="primary-button"
+                  type="button"
+                >
+                  Resume run
+                </button>
+                <button id="restart-button" class="text-button" type="button">
+                  Start a new run
+                </button>
+              </div>
+            </div>
+            <div class="quake-notice" id="quake-notice" hidden>
+              Settlement quake · Watch the dust!
+            </div>
+            <div class="scene-bottom">
+              <span><i></i>Keep those paws moving</span
+              ><span id="distance">0 m</span>
+            </div>
+          </div>
+
+          <div class="game-controls" id="game-instructions">
+            <div class="input-controls">
+              <button type="button" id="jump-button" class="control-button">
+                <span class="desktop-key"
+                  ><kbd>Space</kbd><span class="or">/</span><kbd>↑</kbd></span
+                ><svg class="touch-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 19V5m-6 6 6-6 6 6" /></svg
+                >Jump
+              </button>
+              <button type="button" id="slide-button" class="control-button">
+                <kbd class="desktop-key">↓</kbd
+                ><svg class="touch-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 5v14m-6-6 6 6 6-6" /></svg
+                >Slide
+              </button>
+              <span class="escape-hint"><kbd>Esc</kbd> Pause</span>
+            </div>
+            <span class="controls-note"
+              ><span class="desktop-note"
+                >Dodge rocks. Duck roots. Keep running.</span
+              ><span class="touch-note">Tap the burrow to jump</span></span
+            >
+          </div>
+        </section>
+
+        <section class="chain-strip" aria-labelledby="chain-heading">
+          <div class="chain-heading">
+            <span class="chain-icon" aria-hidden="true"
+              ><svg viewBox="0 0 24 24"><path d="M2 13h4l3-7 5 13 3-8h5" /></svg
+            ></span>
+            <div>
+              <h2 id="chain-heading">A living, breathing burrow.</h2>
+              <p id="feed-message">Connecting to the wheel…</p>
+            </div>
+          </div>
+          <div class="live-metrics">
+            <div class="live-state">
+              <span class="metric-label">Wheel status</span
+              ><span id="live-badge" class="live-badge" data-status="connecting"
+                ><i></i><span id="live-label">Connecting</span></span
+              >
+            </div>
+            <div class="live-rpm">
+              <span class="metric-label">Wheel RPM</span
+              ><strong id="rpm">—</strong
+              ><span class="rpm-meter" aria-hidden="true"
+                ><span id="rpm-fill"></span
+              ></span>
+            </div>
+            <div class="live-round">
+              <span class="metric-label">Settled round</span
+              ><strong id="settled-round">—</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="explainer" aria-label="How the wheel shapes your run">
+          <div class="explanation">
+            <span class="feature-icon" aria-hidden="true"
+              ><svg viewBox="0 0 24 24">
+                <path d="m13 2-9 12h7l-1 8 10-13h-8z" /></svg
+            ></span>
+            <div>
+              <h2>Real wheel. Real pace.</h2>
+              <p>
+                When the wheel spins, your world speeds up. More hazards, a
+                bigger multiplier.
+              </p>
+            </div>
+          </div>
+          <div class="explanation">
+            <span class="feature-icon" aria-hidden="true"
+              ><svg viewBox="0 0 24 24">
+                <path d="M20 14A8 8 0 0 1 10 4a8 8 0 1 0 10 10Z" /></svg
+            ></span>
+            <div>
+              <h2>A moment to breathe.</h2>
+              <p>
+                When the wheel rests, the burrow slows. Find your rhythm and
+                keep going.
+              </p>
+            </div>
+          </div>
+          <div class="explanation">
+            <span class="feature-icon" aria-hidden="true"
+              ><svg viewBox="0 0 24 24">
+                <path
+                  d="m3 17 3-5 5 2 4-8 6 3M4 5l2 2m13 10-1 3M11 3l1 2"
+                /></svg
+            ></span>
+            <div>
+              <h2>A little underground rumble.</h2>
+              <p>
+                Each new settlement shakes loose some dust. A soft quake, never
+                a surprise hit.
+              </p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <span class="footer-credit"
+          ><img src="./favicon.svg" width="20" height="20" alt="" />Made for
+          Squeekchain Genesis Code</span
+        ><span id="storage-note"
+          >Best saved on this device. Bragging rights only.</span
+        ><a
+          href="https://squeekchain.com/genesis"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Explore Squeekchain <span aria-hidden="true">↗</span></a
+        >
+      </footer>
+    </div>
+
+    <dialog id="help-dialog" aria-labelledby="help-title">
+      <div class="dialog-heading">
+        <h2 id="help-title">Welcome to the burrow.</h2>
+        <button
+          class="utility-button icon-button"
+          id="close-help"
+          aria-label="Close how to play"
+          type="button"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m6 6 12 12M18 6 6 18" />
+          </svg>
+        </button>
+      </div>
+      <p>
+        Stay on your paws for as long as you can. Your score grows with distance
+        and the live wheel multiplier.
+      </p>
+      <dl class="help-controls">
+        <div>
+          <dt>Jump over rocks</dt>
+          <dd><kbd>Space</kbd> / <kbd>↑</kbd> or tap the burrow</dd>
+        </div>
+        <div>
+          <dt>Slide under roots</dt>
+          <dd><kbd>↓</kbd> or select Slide</dd>
+        </div>
+        <div>
+          <dt>Take a break</dt>
+          <dd><kbd>Esc</kbd> or select Pause</dd>
+        </div>
+      </dl>
+      <div class="help-feed">
+        <h3>The wheel sets the pace.</h3>
+        <p>
+          Live Squeekchain readings arrive about every 1.5 seconds. ACTIVE
+          raises speed, hazard density, and your multiplier. IDLE gives you a
+          slower run. Settled rounds bring harmless debris.
+        </p>
+        <p>
+          If the feed drops, you can still play at a gentle pace. The badge
+          shows Offline until readings return.
+        </p>
+      </div>
+      <label class="motion-setting"
+        ><input type="checkbox" id="reduce-motion" />Reduce effects<span
+          >Turn off parallax, screen shake, and falling debris.</span
+        ></label
+      >
+      <p class="help-note">
+        Scores are local to this browser. No wallet needed.
+      </p>
+      <button id="close-help-primary" class="primary-button" type="button">
+        Got it
+      </button>
+    </dialog>
+    <div
+      id="announcer"
+      class="sr-only"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
+    <noscript
+      ><p class="noscript">
+        Enable JavaScript to play Wheel Run and receive live wheel readings.
+      </p></noscript
+    >
+  </body>
+</html>

@@ -1,0 +1,9 @@
+# Explicit path budget: artifacts/path-budget.md. dist/ is intentionally included.
+**/node_modules/
+**/.cache/
+**/.npm/
+**/.vite/
+**/.parcel-cache/
+**/.turbo/
+**/*.tsbuildinfo
+/test/scratch/

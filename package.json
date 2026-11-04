@@ -1,0 +1,20 @@
+{
+  "name": "wheel-run",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "An original endless burrow runner driven by the Squeekchain wheel.",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "node scripts/typecheck.mjs",
+    "preview": "node scripts/preview.mjs",
+    "dev": "node scripts/build.mjs && node scripts/preview.mjs",
+    "test": "npm run build && node --test tests/*.test.mjs"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3"
+  }
+}
